@@ -17,3 +17,12 @@ def search_by_word(word: str) -> List[dict]:
 
     return result
 
+def add_post(post: dict) -> dict:
+    posts: List[dict] = load_json_in_list(PATH)
+    posts.append(post)
+    with open(PATH, 'w', encoding='utf-8') as file:
+        # Посты, которые мы хотим добавить и файлы
+        json.dump(posts, file)
+    return post
+
+

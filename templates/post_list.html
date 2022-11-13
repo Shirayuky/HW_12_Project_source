@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!--    ИЗМЕНЕНИЯ:-->
-    <!--    - title: вместо стат.названия добавляем {{ query }}=заданное слово-->
     <meta charset="UTF-8">
     <title>Все посты найденные по запросу {{ query }}</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <main>
-    <!--    ИЗМЕНЕНИЯ:-->
-    <!--    - h1: добавляем П=заданное слово (поиск по слову)-->
-    <!--    - a "Назад"/href: меняем путь на шаблон главной страницы "/"-->
-    <!--    - делаем цикл-->
-    <!--    - img/src: вместо стат.ссылки подставляем путь {{ post.pic }} (из post.json)-->
-    <!--    - p "Описание поста": меняем описание поста на {{ post.content }} (из post.json)-->
     <a href="/" class="link">Назад</a>
     <h1>Посты по запросу {{ query }}</h1>
 
     {% for post in posts %}
-        <div class="post">
-            <img src="{{ post.pic }}"
-                 width="100%" alt="">
-            <p>{{ post.content }}</p>
-        </div>
-        <hr>
+    <div class="post">
+        <img src="{{ post.pic }}"
+             width="100%" alt="">
+        <p>{{ post.content }}</p>
+    </div>
+    <hr>
     {% endfor %}
 
     <a href="post_form.html" class="button">Добавить пост</a>
