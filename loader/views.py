@@ -1,4 +1,7 @@
 """Загрузка фото"""
+import logging
+from json import JSONDecodeError
+
 from flask import Blueprint, render_template, request
 
 # Создаем блюпринт
@@ -16,17 +19,29 @@ def post_page():
     return render_template('post_form.html')
 
 
+def success(post):
+    return render_template('post_uploaded.html',
+                           post=post)
+
+
 @loader_blueprint.route('/post', methods=['POST'])
 def load_file_page():
-    """Кладет загруженный файл в папку uploads"""
     picture = request.files.get('picture')  # , None
     content = request.form.get('content')  # , None
 
+    # Проверка
+    utils.check_picture_resolution(picture)
+
     if not picture or not content:
         return "Нет картинки или текста"
+    try:
+        picture_path: str = '/' + utils.save_picture(picture)
+    except FileNotFoundError:
+        logging.info('Файл не найден')
+        return 'Файл не найден'
+    except JSONDecodeError:
+        return 'Невалидный файл'
 
-    # В функцию передаем словарь с ключами из post.json и со значением переменных выше
-    # Ключи далее передаем в формочку
-    picture_path: str = '/' + utils.save_picture(picture)
-    post: dict = functions.add_post({'pic': picture_path, 'content': content})
-    return render_template('post_uploaded.html', post=post)
+    post = {'pic': picture_path, 'content': content}
+    functions.add_post(post)
+    return success(post)
